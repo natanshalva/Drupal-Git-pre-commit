@@ -1,0 +1,69 @@
+#!/usr/bin/php
+<?php
+
+/** message to indicate the pre-commit is running **/
+fwrite(STDOUT, "Thenks to Natan!\n git pre-commit is running and testig you commit:\n");
+ 
+/**
+ * @file
+ * This is a Git pre-commit hook that informs you when you are
+ * about to commit a dsm().
+ */
+
+/**
+ * The array of lines that will contain the commit diff.
+ */
+global $diff;
+$diff = array();
+
+/**
+ * An array of functions to check for.
+ */
+global $check;
+$check = array();
+$check[] = 'dsm(';
+$check[] = 'dpm(';
+$check[] = 'dpr(';
+$check[] = 'dprint_r(';
+$check[] = 'db_queryd(';
+$check[] = 'kpr(';
+$check[] = 'kprint_r(';
+$check[] = 'var_dump(';
+$check[] = 'dd(';
+$check[] = 'drupal_debug(';
+$check[] = 'settings.php';
+
+/**
+ * The return value of git diff.
+ */
+global $return;
+$return = 0;
+
+/**
+ * Input variable used with fgets().
+ */
+global $input;
+
+exec('git diff && git diff --staged', $diff, $return);
+ 
+if ($return !== 0) {
+  fwrite(STDOUT, "git diff returned an error. Commit aborted.\n");
+  exit(1);
+}
+
+foreach ($diff as $lineno => $line) {
+  if (substr($line, 0, 1) != '+') {
+    // Skip the line if you aren't adding something that may contain dsm().
+    continue;
+  }
+  foreach ($check as $lineno => $function) {
+    if (strstr($line, $function)) {
+    fwrite(STDOUT, "----- Oi Vi Voi! ------ \n You were about to commit a *** $function) ***.\n Please remove the $function) and commit again. ");
+      fwrite(STDOUT, "Commit aborted.\n");
+      exit(2);
+    }
+  }
+}
+// If this is still running, there are no instances of dsm() being added.
+exit(0);
+
