@@ -31,7 +31,7 @@ $check[] = 'kprint_r(';
 $check[] = 'var_dump(';
 $check[] = 'dd(';
 $check[] = 'drupal_debug(';
-$check[] = 'settings.php';
+$check[] = 'default/settings.php';
 
 /**
  * The return value of git diff.
