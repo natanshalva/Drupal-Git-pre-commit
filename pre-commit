@@ -2,7 +2,7 @@
 <?php
 
 /** message to indicate the pre-commit is running **/
-fwrite(STDOUT, "Thenks to Natan!\n git pre-commit is running and testig you commit:\n");
+fwrite(STDOUT, "Thanks to Natan!\n git pre-commit is running and testing your commit:\n");
  
 /**
  * @file
